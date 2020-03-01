@@ -12,12 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from htbuild import div, ul, li, img, styles, fonts, classes, func
+from htbuild import div, ul, li, img, styles, classes, fonts
+from htbuild.units import px
+from htbuild.funcs import rgba
 
 image_paths = [
-  "http://...",
-  "http://...",
-  "http://...",
+  "http://myimages.com/foo1.jpg",
+  "http://myimages.com/foo2.jpg",
+  "http://myimages.com/foo3.jpg",
 ]
 
 out = div(id="container")(
@@ -31,13 +33,15 @@ out = div(id="container")(
 
 print(out)
 
+bottom_margin = 10
+
 s = styles(
-    background="black",
+    color="black",
     font_family=fonts("Comic Sans", "sans"),
-    margin=(0, 0, "10px", 0),
+    margin=px(0, 0, bottom_margin, 0),
     box_shadow=[
-        (0, 0, "10px", func.rgba(0, 0, 0, 0.1)),
-        (0, 0, "2px", func.rgba(0, 0, 0, 0.5)),
+        (0, 0, px(10), rgba(0, 0, 0, 0.1)),
+        (0, 0, "2px", rgba(0, 0, 0, 0.5)),
     ],
 )
 

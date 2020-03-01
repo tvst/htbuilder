@@ -59,6 +59,9 @@ If using Python < 3.7, the import should look like this instead:
 
 """
 
+from .funcs import func
+from .units import unit
+from .utils import classes, styles, fonts
 from iteration_utilities import deepflatten
 
 
@@ -146,103 +149,6 @@ def _clean_attr_name(k):
     # This allows you to use reserved words by prepending/appending underscores.
     # For example, "_class" instead of "class".
     return k.strip("_")
-
-
-def classes(*names, convert_underscores=True, **names_and_bools):
-    """Join multiple class names with spaces between them.
-
-    Example
-    -------
-
-    >>> classes("foo", "bar", baz=False, boz=True, long_name=True)
-    "foo bar boz long-name"
-
-    Or, if you want to keep the underscores:
-
-    >>> classes("foo", "bar", long_name=True, convert_underscores=False)
-    "foo bar long_name"
-
-    """
-    if convert_underscores:
-        def clean(name):
-            return name.replace("_", "-")
-    else:
-        def clean(name):
-            return name
-
-    classes = [clean(name) for name in names]
-
-    for name, include in names_and_bools.items():
-        if include:
-            classes.append(clean(name))
-
-    return " ".join(classes)
-
-
-def styles(**rules):
-    """Create a style string from Python objects.
-
-    For rules that have multiple components use tuples or lists. Tuples are
-    joined with spaces " ", lists are joined with commas ",". And although you
-    can use lists for font-family rules, we also provide a helper called
-    `fonts()` that wraps font names in quotes as well. See example below.
-
-    Example
-    -------
-
-    >>> styles(
-    ...     background="black",
-    ...     font_family=fonts("Comic Sans", "sans"),
-    ...     margin=(0, 0, "10px", 0),
-    ...     box_shadow=[
-    ...         (0, 0, "10px", func.rgba(0, 0, 0, 0.1)),
-    ...         (0, 0, "2px", func.rgba(0, 0, 0, 0.5)),
-    ...     ],
-    ... )
-    ...
-    "background:black;font-family:\"Comic Sans\",\"sans\";margin:0 0 10px 0;
-    box-shadow:0 0 10px rgba(0,0,0,0.1),0 0 2px rgba(0,0,0,0.5)"
-
-    """
-    if not isinstance(rules, dict):
-        raise TypeError("Style must be a dict")
-
-    return ";".join(
-        "%s:%s" % (k.replace("_", "-"), _parse_style_value(v))
-        for (k, v) in rules.items()
-    )
-
-    return _parse_style_value(v)
-
-
-def _parse_style_value(style):
-    if isinstance(style, tuple):
-        return ",".join(_parse_style_value(x) for x  in style)
-
-    if isinstance(style, list):
-        return ";".join(_parse_style_value(x) for x  in style)
-
-    return str(style)
-
-
-class _FuncBuilder(object):
-    """"""
-    def __getattr__(self, name):
-        def _the_func(*args):
-            return "%s(%s)" % (name, ",".join(str(x) for x in args))
-        return _the_func
-
-
-func = _FuncBuilder()
-
-
-def fonts(*names):
-    """Join fonts with quotes and commas.
-
-    >>> fonts("Comic Sans, "sans")
-    "\"Comic Sans\", \"Sans\""
-    """
-    return ",".join('"%s"' % name for name in names)
 
 
 # Python >= 3.7
