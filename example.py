@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from htbuild import div, ul, li, img
+from htbuild import div, ul, li, img, styles, fonts, classes, func
 
 image_paths = [
   "http://...",
@@ -30,3 +30,15 @@ out = div(id="container")(
 )
 
 print(out)
+
+s = styles(
+    background="black",
+    font_family=fonts("Comic Sans", "sans"),
+    margin=(0, 0, "10px", 0),
+    box_shadow=[
+        (0, 0, "10px", func.rgba(0, 0, 0, 0.1)),
+        (0, 0, "2px", func.rgba(0, 0, 0, 0.5)),
+    ],
+)
+
+print(s)
