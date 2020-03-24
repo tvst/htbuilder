@@ -102,3 +102,8 @@ def fonts(*names):
     return ",".join('"%s"' % name for name in names)
 
 
+def rule(*selectors, **properties):
+    return "%s {%s}" % (
+        ",".join(selectors),
+        styles(**properties),
+    )

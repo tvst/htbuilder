@@ -61,7 +61,7 @@ If using Python < 3.7, the import should look like this instead:
 
 from .funcs import func
 from .units import unit
-from .utils import classes, styles, fonts
+from .utils import classes, styles, fonts, rule
 from iteration_utilities import deepflatten
 
 

@@ -18,7 +18,7 @@ Easily add units to CSS properties.
 Usage
 -----
 
->>> from htbuilder.units import px, em, percent
+>>> from htbuild.units import px, em, percent
 >>>
 >>> px(10)
 ("10px")
