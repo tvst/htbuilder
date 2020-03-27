@@ -44,29 +44,55 @@ class TestHtBuild(unittest.TestCase):
             normalize_whitespace('<div id="container">hello</div>'),
         )
 
-    def test_iterable_children(self):
-        children = ('one', 'two', 'three')
+    def test_tuple_children(self):
+        children = tuple(range(5))
+        dom = div(id='container')(children)
+        self.assertEqual(str(dom), '<div id="container">01234</div>')
+
         dom = div(children)
-        self.assertEqual(
-            str(dom),
-            normalize_whitespace('<div>onetwothree</div>'),
-        )
+        self.assertEqual(str(dom), '<div>01234</div>')
 
     def test_vararg_children(self):
-        children = ('one', 'two', 'three')
+        children = tuple(range(5))
+        dom = div(id='container')(*children)
+        self.assertEqual(str(dom), '<div id="container">01234</div>')
+
         dom = div(*children)
-        self.assertEqual(
-            str(dom),
-            normalize_whitespace('<div>onetwothree</div>'),
-        )
+        self.assertEqual(str(dom), '<div>01234</div>')
+
+    def test_list_children(self):
+        children = list(range(5))
+        dom = div(id='container')(children)
+        self.assertEqual(str(dom), '<div id="container">01234</div>')
+
+        dom = div(children)
+        self.assertEqual(str(dom), '<div>01234</div>')
+
+    def test_iterable_children(self):
+        children = range(5)
+        dom = div(id='container')(children)
+        self.assertEqual(str(dom), '<div id="container">01234</div>')
+
+        dom = div(children)
+        self.assertEqual(str(dom), '<div>01234</div>')
+
+    def test_nested_children(self):
+        children = [range(2), tuple(range(3))]
+        dom = div(id='container')(children)
+        self.assertEqual(str(dom), '<div id="container">01012</div>')
+
+        dom = div(children)
+        self.assertEqual(str(dom), '<div>01012</div>')
 
     def test_complex_tree(self):
-        dom = div(id='container')(
-            h1('Examples'),
-            ul(
-                li("Example 1"),
-                li("Example 2"),
-                li("Example 3"),
+        dom = (
+            div(id='container')(
+                h1('Examples'),
+                ul(
+                    li("Example 1"),
+                    li("Example 2"),
+                    li("Example 3"),
+                )
             )
         )
         self.assertEqual(
@@ -84,7 +110,13 @@ class TestHtBuild(unittest.TestCase):
         )
 
     def test_multiple_html_args(self):
-        dom = div(id='container', _class='foo bar', style='color: red; border-radius: 10px;')('hello')
+        dom = (
+            div(
+                id='container',
+                _class='foo bar',
+                style='color: red; border-radius: 10px;',
+            )('hello')
+        )
         self.assertEqual(
             str(dom),
             normalize_whitespace('''
