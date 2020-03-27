@@ -23,6 +23,13 @@ from .test_util import normalize_whitespace
 
 
 class TestHtBuild(unittest.TestCase):
+    def test_empty(self):
+        dom = div()
+        self.assertEqual(
+            str(dom),
+            normalize_whitespace('<div></div>'),
+        )
+
     def test_basic_usage(self):
         dom = div('hello')
         self.assertEqual(
