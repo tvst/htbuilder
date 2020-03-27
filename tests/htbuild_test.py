@@ -24,6 +24,13 @@ from .test_util import normalize_whitespace
 
 class TestHtBuild(unittest.TestCase):
     def test_basic_usage(self):
+        dom = div('hello')
+        self.assertEqual(
+            str(dom),
+            normalize_whitespace('<div>hello</div>'),
+        )
+
+    def test_basic_usage_with_arg(self):
         dom = div(id='container')('hello')
         self.assertEqual(
             str(dom),
@@ -32,18 +39,18 @@ class TestHtBuild(unittest.TestCase):
 
     def test_iterable_children(self):
         children = ('one', 'two', 'three')
-        dom = div(id='container')(children)
+        dom = div(children)
         self.assertEqual(
             str(dom),
-            normalize_whitespace('<div id="container">onetwothree</div>'),
+            normalize_whitespace('<div>onetwothree</div>'),
         )
 
     def test_vararg_children(self):
         children = ('one', 'two', 'three')
-        dom = div(id='container')(*children)
+        dom = div(*children)
         self.assertEqual(
             str(dom),
-            normalize_whitespace('<div id="container">onetwothree</div>'),
+            normalize_whitespace('<div>onetwothree</div>'),
         )
 
     def test_complex_tree(self):
