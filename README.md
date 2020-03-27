@@ -57,6 +57,8 @@ _before_ you pass normal arguments.
 
 ## Multiple children
 
+Want to output multiple children? Just pass them all as arguments:
+
 ```py
 from htbuild import div, ul, li, img
 
@@ -84,8 +86,8 @@ print(dom)
 
 ## Programmatically add children
 
-You can also pass a list to specify multiple children, which means you can
-simply use `map()` and list comprehensions for great awesome:
+You can also pass any iterable to specify multiple children, which means you can
+simply use things like list comprehensions for great awesome:
 
 ```py
 from htbuild import div, ul, li, img
@@ -96,16 +98,44 @@ image_paths = [
   'http://myimages.com/foo3.jpg',
 ]
 
-html_element = (
+dom = (
   div(id='container')(
     ul(_class='image-list')(
-      [
-        li(img(src=image_path, _class='large-image'))
-        for image_path in image_paths
-      ]
+      li(img(src=image_path, _class='large-image'))
+      for image_path in image_paths
     )
   )
 )
+
+print(dom)
+# Prints:
+# <div id="container">
+#   <ul class="image-list">
+#     <li><img src="http://myimages.com/foo1.jpg" class="large-image"/></li>
+#     <li><img src="http://myimages.com/foo2.jpg" class="large-image"/></li>
+#     <li><img src="http://myimages.com/foo3.jpg" class="large-image"/></li>
+#   </ul>
+# </div>
+```
+
+## Conditionally add elements
+
+And because it's just Python, you can use an if/else expression to conditionally
+insert elements:
+
+```py
+use_bold = True
+
+dom = (
+  div(
+      b("bold text")
+    if use_bold else
+      "normal text"
+  )
+)
+
+print(dom)
+# Prints: <div><b>bold text</b></div>
 ```
 
 ## Styling
@@ -132,7 +162,7 @@ dom = (
     _class=classes('btn', big=is_big)
     style=styles(
         color='black',
-        font_family=fonts('Comic Sans', 'sans'),
+        font_family=fonts('Comic Sans', 'sans-serif'),
         margin=px(0, 0, bottom_margin, 0),
         padding=(px(10), percent(5))
         box_shadow=[
@@ -142,6 +172,17 @@ dom = (
     )
   )
 )
+
+# Prints:
+# <div
+#   class="btn big"
+#   style="
+#     color: black;
+#     font-family: "Comic Sans", "sans-serif";
+#     margin: 0 0 10px 0;
+#     padding: 10px 5%;
+#     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1), 0 0 2px rgb(0, 0, 0);
+#   "></div>
 ```
 
 
