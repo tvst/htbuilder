@@ -82,7 +82,7 @@ print(dom)
 # </div>
 ```
 
-# Programmatically add children
+## Programmatically add children
 
 You can also pass a list to specify multiple children, which means you can
 simply use `map()` and list comprehensions for great awesome:
@@ -108,7 +108,7 @@ html_element = (
 )
 ```
 
-# Styling
+## Styling
 
 We provide helpers to write styles without having to pass huge style strings as
 arguments. Instead, just use handy builders like `styles()`, `classes()`,
@@ -145,7 +145,7 @@ dom = (
 ```
 
 
-# Working with Python &lt; 3.7
+## Working with Python &lt; 3.7
 
 If using Python &lt; 3.7, the import should look like this instead:
 
