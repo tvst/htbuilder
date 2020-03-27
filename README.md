@@ -8,6 +8,10 @@ Why use templating languages when you can just use functions?
 Just import tags like `div` with `from htbuild import div`, then call them:
 
 ```py
+# Import any tag you want from htbuild, and it just works!
+# (This syntax requires Python 3.7+. See below for an alternate syntax)
+from htbuild import div
+
 dom = div('Hello world!')
 ```
 
@@ -50,21 +54,11 @@ print(
 This is required because Python doesn't allow you to pass keyword arguments
 _before_ you pass normal arguments.
 
-## Examples
 
-If using Python 3.7+:
+## Multiple children
 
 ```py
-# Import anything you want from htbuild, and it just works! None of these tags
-# are hard-coded, so you can import literally anything.
-# (This syntax requires Python 3.7+)
 from htbuild import div, ul, li, img
-
-image_paths = [
-  'http://...',
-  'http://...',
-  'http://...',
-]
 
 dom = (
   div(id='container')(
@@ -77,21 +71,16 @@ dom = (
 )
 
 print(dom)
+
+# Prints this (but without added spacing):
+# <div id="container">
+#   <ul class="greetings">
+#     <li>hello</li>
+#     <li>hi</li>
+#     <li>whattup</li>
+#   </ul>
+# </div>
 ```
-
-If using Python &lt; 3.7, the import should look like this instead:
-
-```py
-from htbuild import H
-
-div = H.div
-ul = H.ul
-li = H.li
-img = H.img
-```
-
-...then the rest is the same as in the previous example.
-
 
 # Programmatically add children
 
@@ -153,4 +142,19 @@ dom = (
     )
   )
 )
+```
+
+
+# Working with Python &lt; 3.7
+
+If using Python &lt; 3.7, the import should look like this instead:
+
+```py
+from htbuild import H
+
+div = H.div
+ul = H.ul
+li = H.li
+img = H.img
+# ...etc
 ```
