@@ -12,11 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from htbuild import div, ul, li, img, h1
-from htbuild.utils import styles
-from htbuild.units import px, em, percent
-from htbuild_test import normalize_whitespace
 import unittest
+
+from htbuild.units import px, em, percent
 
 
 class TestUnits(unittest.TestCase):
@@ -32,11 +30,6 @@ class TestUnits(unittest.TestCase):
         self.assertEqual(em(5, 7), ('5em', '7em'))
         self.assertEqual(percent(99, 99.9), ('99%', '99.9%'))
 
-    def test_builder(self):
-        dom = div(style=styles(foo=px(10, 9, 8)))
-        self.assertEqual(str(dom), normalize_whitespace('''
-            <div style="foo:10px,9px,8px"></div>
-        '''))
 
 if __name__ == '__main__':
     unittest.main()

@@ -12,9 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from htbuild import div, ul, li, img, h1
-import re
 import unittest
+
+from htbuild import div, ul, li, img, h1
+from htbuild.funcs import rgba
+from htbuild.units import px, em, percent
+from htbuild.utils import styles
+
+from .test_util import normalize_whitespace
 
 
 class TestHtBuild(unittest.TestCase):
@@ -77,15 +82,50 @@ class TestHtBuild(unittest.TestCase):
             '''),
         )
 
+    def test_functional_component(self):
+        component = ul(_class='myul')(
+            li('Hello'),
+        )
 
-def normalize_whitespace(s):
-    s = s.replace('\n', '')
-    s = re.sub(r'([<>"])\s+([<>"])', r'\1\2', s)
-    s = re.sub(r'^ \s+', r'', s)
-    s = re.sub(r' \s+$', r'', s)
-    s = re.sub(r' \s+', r' ', s)
-    return s
+        dom = component(style='color: red')(
+            li('Goodbye'),
+        )
 
+        self.assertEqual(
+            str(dom),
+            normalize_whitespace('''
+              <ul
+                class="myul"
+                style="color: red"
+                  ><li>Hello</li>
+                  <li>Goodbye</li>
+              </ul>
+            '''),
+        )
+
+    def test_funcs_in_builder(self):
+        dom = div(style=styles(color=rgba(10, 20, 30, 40)))
+        self.assertEqual(str(dom), normalize_whitespace('''
+            <div style="color:rgba(10,20,30,40)"></div>
+        '''))
+
+    def test_units_in_builder(self):
+        dom = div(style=styles(foo=px(10, 9, 8)))
+        self.assertEqual(str(dom), normalize_whitespace('''
+            <div style="foo:10px 9px 8px"></div>
+        '''))
+
+    def test_funcs_and_units_in_builder(self):
+        dom = div(style=styles(margin=px(0, 0, 10, 0)))
+        self.assertEqual(str(dom), normalize_whitespace('''
+            <div style="margin:0 0 10px 0"></div>
+        '''))
+
+    def test_funcs_and_units_in_builder(self):
+        dom = div(style=styles(animate=['color', 'margin']))
+        self.assertEqual(str(dom), normalize_whitespace('''
+            <div style="animate:color,margin"></div>
+        '''))
 
 if __name__ == '__main__':
     unittest.main()

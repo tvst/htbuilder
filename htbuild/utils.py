@@ -85,10 +85,10 @@ def styles(**rules):
 
 def _parse_style_value(style):
     if isinstance(style, tuple):
-        return ",".join(_parse_style_value(x) for x  in style)
+        return " ".join(_parse_style_value(x) for x  in style)
 
     if isinstance(style, list):
-        return ";".join(_parse_style_value(x) for x  in style)
+        return ",".join(_parse_style_value(x) for x  in style)
 
     return str(style)
 
