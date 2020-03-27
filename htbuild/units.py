@@ -21,11 +21,11 @@ Usage
 >>> from htbuild.units import px, em, percent
 >>>
 >>> px(10)
-("10px")
+("10px",)
 >>> em(0, 1, 2, 3)
 ("0", "1em", "2em", "3em")
 >>> percent(10)
-("10%")
+("10%",)
 """
 
 class _UnitBuilder(object):

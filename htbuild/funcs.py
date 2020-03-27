@@ -18,7 +18,7 @@ Easily write CSS functions
 Usage
 -----
 
->>> from htbuilder.funcs import rgba, hsl
+>>> from htbuild.funcs import rgba, hsl
 >>>
 >>> rgba(0, 0, 0, 0.1)
 "rgba(0, 0, 0, 0.1)"

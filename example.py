@@ -14,7 +14,7 @@
 
 from htbuild import div, ul, li, img, styles, classes, fonts
 from htbuild.units import px
-from htbuild.funcs import rgba
+from htbuild.funcs import rgba, rgb
 
 image_paths = [
   "http://myimages.com/foo1.jpg",
@@ -22,7 +22,7 @@ image_paths = [
   "http://myimages.com/foo3.jpg",
 ]
 
-out = div(id="container")(
+html_element = div(id="container")(
   ul(_class="image-list")(
     [
       li(img(src=image_path, _class="large-image"))
@@ -31,7 +31,7 @@ out = div(id="container")(
   )
 )
 
-print(out)
+print(html_element)
 
 bottom_margin = 10
 
@@ -41,7 +41,7 @@ s = styles(
     margin=px(0, 0, bottom_margin, 0),
     box_shadow=[
         (0, 0, px(10), rgba(0, 0, 0, 0.1)),
-        (0, 0, "2px", rgba(0, 0, 0, 0.5)),
+        (0, 0, "2px", rgb(0, 0, 0)),
     ],
 )
 
