@@ -1,7 +1,7 @@
-# htbuild — Tiny HTML string builder for Python
+# htbuild — tiny HTML string builder for Python
 
-Build HTML strings using a purely functional syntax! Why use templating
-languages when you can just use Python?
+htbuild lets you build HTML strings using a purely functional syntax in Python.
+Why use templating languages when you can just use functions?
 
 ## Examples
 
