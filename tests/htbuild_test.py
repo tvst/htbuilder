@@ -14,7 +14,7 @@
 
 import unittest
 
-from htbuild import div, ul, li, img, h1
+from htbuild import div, ul, li, img, h1, script
 from htbuild.funcs import rgba
 from htbuild.units import px, em, percent
 from htbuild.utils import styles
@@ -171,6 +171,12 @@ class TestHtBuild(unittest.TestCase):
         dom = div(style=styles(animate=['color', 'margin']))
         self.assertEqual(str(dom), normalize_whitespace('''
             <div style="animate:color,margin"></div>
+        '''))
+
+    def test_script_tag(self):
+        dom = script(language="javascript")("console.log('omg!')")
+        self.assertEqual(str(dom), normalize_whitespace('''
+            <script language="javascript">console.log('omg!')</script>
         '''))
 
 if __name__ == '__main__':
