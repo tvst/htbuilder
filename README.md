@@ -6,6 +6,14 @@ Why use templating languages when you can just use functions?
 (PS: If you like this, check out [jsbuild](https://github.com/tvst/jsbuild) which
 lets you build JavaScript strings by simply annotating Python functions!)
 
+## Installation
+
+Just PIP it!
+
+```py
+pip install htbuilder
+```
+
 ## Usage
 
 Just import tags like `div` with `from htbuilder import div`, then call them:
