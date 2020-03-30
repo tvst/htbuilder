@@ -14,7 +14,7 @@
 
 import unittest
 
-from htbuild.funcs import rgba, hsl
+from htbuilder.funcs import rgba, hsl
 
 
 class TestFuncs(unittest.TestCase):

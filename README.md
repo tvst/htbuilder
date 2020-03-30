@@ -1,6 +1,6 @@
-# htbuild — tiny HTML string builder for Python
+# htbuilder — tiny HTML string builder for Python
 
-htbuild lets you build HTML strings using a purely functional syntax in Python.
+htbuilder lets you build HTML strings using a purely functional syntax in Python.
 Why use templating languages when you can just use functions?
 
 (PS: If you like this, check out [jsbuild](https://github.com/tvst/jsbuild) which
@@ -8,12 +8,12 @@ lets you build JavaScript strings by simply annotating Python functions!)
 
 ## Usage
 
-Just import tags like `div` with `from htbuild import div`, then call them:
+Just import tags like `div` with `from htbuilder import div`, then call them:
 
 ```py
-# Import any tag you want from htbuild, and it just works!
+# Import any tag you want from htbuilder, and it just works!
 # (This syntax requires Python 3.7+. See below for an alternate syntax)
-from htbuild import div
+from htbuilder import div
 
 dom = div('Hello world!')
 ```
@@ -63,7 +63,7 @@ _before_ you pass normal arguments.
 Want to output multiple children? Just pass them all as arguments:
 
 ```py
-from htbuild import div, ul, li, img
+from htbuilder import div, ul, li, img
 
 dom = (
   div(id='container')(
@@ -93,7 +93,7 @@ You can also pass any iterable to specify multiple children, which means you can
 simply use things like list comprehensions for great awesome:
 
 ```py
-from htbuild import div, ul, li, img
+from htbuilder import div, ul, li, img
 
 image_paths = [
   'http://myimages.com/foo1.jpg',
@@ -150,12 +150,12 @@ modules.
 
 ```py
 # styles, classes, and fonts are special imports to help build attribute strings.
-from htbuild import div, styles, classes, fonts
+from htbuilder import div, styles, classes, fonts
 
 # You can import anything from .units and .funcs to make it easier to specify
 # units like "%" and "px", as well as functions like "rgba()" and "rgba()".
-from htbuild.units import percent, px
-from htbuild.funcs import rgba, rgb
+from htbuilder.units import percent, px
+from htbuilder.funcs import rgba, rgb
 
 bottom_margin = 10
 is_big = True
@@ -194,7 +194,7 @@ dom = (
 If using Python &lt; 3.7, the import should look like this instead:
 
 ```py
-from htbuild import H
+from htbuilder import H
 
 div = H.div
 ul = H.ul

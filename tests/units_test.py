@@ -14,7 +14,7 @@
 
 import unittest
 
-from htbuild.units import px, em, percent
+from htbuilder.units import px, em, percent
 
 
 class TestUnits(unittest.TestCase):

@@ -14,15 +14,15 @@
 
 import unittest
 
-from htbuild import div, ul, li, img, h1, script
-from htbuild.funcs import rgba
-from htbuild.units import px, em, percent
-from htbuild.utils import styles
+from htbuilder import div, ul, li, img, h1, script
+from htbuilder.funcs import rgba
+from htbuilder.units import px, em, percent
+from htbuilder.utils import styles
 
 from .test_util import normalize_whitespace
 
 
-class TestHtBuild(unittest.TestCase):
+class TestHtBuilder(unittest.TestCase):
     def test_empty(self):
         dom = div()
         self.assertEqual(

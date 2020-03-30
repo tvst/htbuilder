@@ -13,7 +13,7 @@
 # limitations under the License.
 
 """
-htbuild -- Tiny HTML string builder for Python
+htbuilder -- Tiny HTML string builder for Python
 ===========================================
 
 Build HTML strings using a purely functional syntax:
@@ -23,7 +23,7 @@ Example
 
 If using Python 3.7+:
 
->>> from htbuild import div, ul, li, img  # This syntax requires Python 3.7+
+>>> from htbuilder import div, ul, li, img  # This syntax requires Python 3.7+
 >>>
 >>> image_paths = [
 ...   "http://...",
@@ -48,7 +48,7 @@ If using Python 3.7+:
 
 If using Python < 3.7, the import should look like this instead:
 
->>> from htbuild import H
+>>> from htbuilder import H
 >>>
 >>> div = H.div
 >>> ul = H.ul

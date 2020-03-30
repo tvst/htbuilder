@@ -12,9 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from htbuild import div, ul, li, img, styles, classes, fonts
-from htbuild.units import px
-from htbuild.funcs import rgba, rgb
+from htbuilder import div, ul, li, img, styles, classes, fonts
+from htbuilder.units import px
+from htbuilder.funcs import rgba, rgb
 
 image_paths = [
   "http://myimages.com/foo1.jpg",

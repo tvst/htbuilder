@@ -4,7 +4,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="htbuild",
+    name="htbuilder",
     version="0.0.1",
     author="Thiago Teixeira",
     author_email="me@thiagot.com",
@@ -12,7 +12,7 @@ setuptools.setup(
     license="Apache 2",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/tvst/htbuild",
+    url="https://github.com/tvst/htbuilder",
     packages=setuptools.find_packages(exclude=["tests", "tests.*"]),
     install_requires=["iteration_utilities"],
     classifiers=[
