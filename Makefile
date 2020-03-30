@@ -7,9 +7,9 @@ help:
 .PHONY: develop
 # Set up development environment
 develop:
-	pipenv shell
 	pipenv install --dev
-	python setup.py develop
+	pipenv run python setup.py develop
+	pipenv shell
 
 .PHONY: install
 # Install in your current Python environment
