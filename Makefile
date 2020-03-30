@@ -32,6 +32,6 @@ clean:
 .PHONY: distribute
 # Distributes the package to PyPI
 distribute:
+	rm -rf dist
 	python setup.py sdist
 	twine upload dist/*
-	rm -rf dist
