@@ -50,7 +50,7 @@ print(
 ```
 
 To specify both attributes and children, first specify the attributes using
-keyword args, then pass the children afterwards by passing them **inside a new
+keyword args, then pass the children afterwards **inside a new
 set of parentheses**:
 
 ```py
@@ -98,7 +98,7 @@ print(dom)
 ## Programmatically add children
 
 You can also pass any iterable to specify multiple children, which means you can
-simply use things like list comprehensions for great awesome:
+simply use things like generator expressions for great awesome:
 
 ```py
 from htbuilder import div, ul, li, img
