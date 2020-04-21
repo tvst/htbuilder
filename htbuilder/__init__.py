@@ -151,6 +151,10 @@ def _clean_attr_name(k):
     return k.strip("_")
 
 
+def fragment(*args):
+    return ''.join(str(arg) for arg in args)
+
+
 # Python >= 3.7
 # https://docs.python.org/3/reference/datamodel.html#customizing-module-attribute-access
 def __getattr__(tag):

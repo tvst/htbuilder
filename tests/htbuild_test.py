@@ -14,7 +14,7 @@
 
 import unittest
 
-from htbuilder import div, ul, li, img, h1, script
+from htbuilder import div, ul, li, img, h1, script, fragment
 from htbuilder.funcs import rgba
 from htbuilder.units import px, em, percent
 from htbuilder.utils import styles
@@ -177,6 +177,15 @@ class TestHtBuilder(unittest.TestCase):
         dom = script(language="javascript")("console.log('omg!')")
         self.assertEqual(str(dom), normalize_whitespace('''
             <script language="javascript">console.log('omg!')</script>
+        '''))
+
+    def test_fragment_tag(self):
+        dom = fragment(
+            h1('hello'),
+            div('world')
+        )
+        self.assertEqual(str(dom), normalize_whitespace('''
+            <h1>hello</h1><div>world</div>
         '''))
 
 if __name__ == '__main__':
