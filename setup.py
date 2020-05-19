@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="htbuilder",
-    version="0.1.0",
+    version="0.2.0",
     author="Thiago Teixeira",
     author_email="me@thiagot.com",
     description="A purely-functional HTML builder for Python. Think JSX rather than templates.",
