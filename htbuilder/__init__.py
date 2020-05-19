@@ -65,8 +65,8 @@ from .utils import classes, styles, fonts, rule
 from iteration_utilities import deepflatten
 
 
-# https://developer.mozilla.org/en-US/docs/Glossary/Empty_element
 EMPTY_ELEMENTS = set([
+    # https://developer.mozilla.org/en-US/docs/Glossary/Empty_element
     "area",
     "base",
     "br",
@@ -82,6 +82,14 @@ EMPTY_ELEMENTS = set([
     "source",
     "track",
     "wbr",
+
+    # SVG
+    "circle",
+    "line",
+    "path",
+    "polygon",
+    "polyline",
+    "rect",
 ])
 
 
