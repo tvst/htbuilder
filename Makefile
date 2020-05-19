@@ -14,7 +14,7 @@ develop:
 .PHONY: install
 # Install in your current Python environment
 install:
-	python setup.py install
+	pipenv run python setup.py install
 
 .PHONY: test
 # Run unit tests
