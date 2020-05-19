@@ -188,5 +188,35 @@ class TestHtBuilder(unittest.TestCase):
             <h1>hello</h1><div>world</div>
         '''))
 
+    def test_get_set_del_attr(self):
+        dom = div(foo="bar", boz="boink")
+
+        self.assertEqual(dom.foo, "bar")
+        self.assertEqual(dom.boz, "boink")
+
+        dom.foo = "bar2"
+
+        self.assertEqual(dom.foo, "bar2")
+        self.assertEqual(dom.boz, "boink")
+
+        dom.boz = "boink2"
+
+        self.assertEqual(dom.foo, "bar2")
+        self.assertEqual(dom.boz, "boink2")
+
+        del dom.boz
+
+        self.assertEqual(dom.foo, "bar2")
+        with self.assertRaises(KeyError):
+            getattr(dom, "boz")
+
+        del dom.foo
+
+        with self.assertRaises(KeyError):
+            getattr(dom, "foo")
+        with self.assertRaises(KeyError):
+            getattr(dom, "boz")
+
+
 if __name__ == '__main__':
     unittest.main()

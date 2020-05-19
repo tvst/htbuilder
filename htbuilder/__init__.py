@@ -131,6 +131,18 @@ class HtmlElement(object):
 
         return self
 
+    def __getattr__(self, name):
+        return self._attrs[name]
+
+    def __setattr__(self, name, value):
+        if name.startswith("_"):
+            object.__setattr__(self, name, value)
+            return
+        self._attrs[name] = value
+
+    def __delattr__(self, name):
+        del self._attrs[name]
+
     def __str__(self):
         args = {
             "tag": self._tag,
