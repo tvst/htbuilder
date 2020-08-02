@@ -155,9 +155,9 @@ class HtmlElement(object):
 
         if self._is_empty:
             if self._attrs:
-                return "<%(tag)s %(attrs)s>" % args
+                return "<%(tag)s %(attrs)s/>" % args
             else:
-                return "<%(tag)s>" % args
+                return "<%(tag)s/>" % args
         else:
             if self._attrs:
                 return "<%(tag)s %(attrs)s>%(children)s</%(tag)s>" % args

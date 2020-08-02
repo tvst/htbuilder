@@ -44,6 +44,13 @@ class TestHtBuilder(unittest.TestCase):
             normalize_whitespace('<div id="container">hello</div>'),
         )
 
+    def test_self_closing(self):
+        dom = img(src="foo")
+        self.assertEqual(
+            str(dom),
+            normalize_whitespace('<img src="foo"/>'),
+        )
+
     def test_tuple_children(self):
         children = tuple(range(5))
         dom = div(id='container')(children)
