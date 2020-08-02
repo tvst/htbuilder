@@ -10,3 +10,5 @@ eggs/
 .eggs/
 *.egg-info/
 *.egg
+
+*.bak
