@@ -214,16 +214,21 @@ class TestHtBuilder(unittest.TestCase):
         del dom.boz
 
         self.assertEqual(dom.foo, "bar2")
-        with self.assertRaises(KeyError):
+        with self.assertRaises(AttributeError):
             getattr(dom, "boz")
 
         del dom.foo
 
-        with self.assertRaises(KeyError):
+        with self.assertRaises(AttributeError):
             getattr(dom, "foo")
-        with self.assertRaises(KeyError):
+        with self.assertRaises(AttributeError):
             getattr(dom, "boz")
 
+
+    def test_no_such_attr(self):
+        dom = div()
+        res = hasattr(dom, "foo")
+        self.assertFalse(res)
 
 if __name__ == '__main__':
     unittest.main()

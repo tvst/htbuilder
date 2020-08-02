@@ -132,7 +132,9 @@ class HtmlElement(object):
         return self
 
     def __getattr__(self, name):
-        return self._attrs[name]
+        if name in self._attrs:
+            return self._attrs[name]
+        raise AttributeError("No such attribute %s" % name)
 
     def __setattr__(self, name, value):
         if name.startswith("_"):
