@@ -14,7 +14,7 @@
 
 import unittest
 
-from htbuilder import div, ul, li, img, h1, script, fragment
+from htbuilder import div, ul, li, img, h1, script, fragment, my_custom_element, _my_custom_element
 from htbuilder.funcs import rgba
 from htbuilder.units import px, em, percent
 from htbuilder.utils import styles
@@ -229,6 +229,30 @@ class TestHtBuilder(unittest.TestCase):
         dom = div()
         res = hasattr(dom, "foo")
         self.assertFalse(res)
+
+    def test_tag_understores_to_dashes(self):
+        dom = my_custom_element(foo="bar")
+        self.assertEqual(str(dom), normalize_whitespace('''
+            <my-custom-element foo="bar"></my-custom-element>
+        '''))
+
+    def test_tag_understores_to_dashes_with_strip(self):
+        dom = _my_custom_element(foo="bar")
+        self.assertEqual(str(dom), normalize_whitespace('''
+            <my-custom-element foo="bar"></my-custom-element>
+        '''))
+
+    def test_attr_understores_to_dashes(self):
+        dom = div(foo_bar="boz")
+        self.assertEqual(str(dom), normalize_whitespace('''
+            <div foo-bar="boz"></div>
+        '''))
+
+    def test_attr_understores_to_dashes_with_strip(self):
+        dom = div(__foo_bar_="boz")
+        self.assertEqual(str(dom), normalize_whitespace('''
+            <div foo-bar="boz"></div>
+        '''))
 
 if __name__ == '__main__':
     unittest.main()

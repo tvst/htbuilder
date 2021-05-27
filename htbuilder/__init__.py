@@ -147,9 +147,9 @@ class HtmlElement(object):
 
     def __str__(self):
         args = {
-            "tag": self._tag,
+            "tag": _clean_name(self._tag),
             "attrs": " ".join([
-                "%s=\"%s\"" % (_clean_attr_name(k), v)
+                "%s=\"%s\"" % (_clean_name(k), v)
                 for k, v in self._attrs.items()
             ]),
             "children": "".join([str(c) for c in self._children])
@@ -167,10 +167,10 @@ class HtmlElement(object):
                 return "<%(tag)s>%(children)s</%(tag)s>" % args
 
 
-def _clean_attr_name(k):
+def _clean_name(k):
     # This allows you to use reserved words by prepending/appending underscores.
     # For example, "_class" instead of "class".
-    return k.strip("_")
+    return k.strip("_").replace("_", "-")
 
 
 def fragment(*args):
