@@ -254,5 +254,12 @@ class TestHtBuilder(unittest.TestCase):
             <div foo-bar="boz"></div>
         '''))
 
+    def test_arg_order(self):
+        dom = div("hello", foo="bar")
+        self.assertEqual(str(dom), normalize_whitespace('''
+            <div foo="bar">hello</div>
+        '''))
+
+
 if __name__ == '__main__':
     unittest.main()

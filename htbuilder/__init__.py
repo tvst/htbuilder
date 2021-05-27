@@ -118,9 +118,6 @@ class HtmlElement(object):
         self._is_empty = tag in EMPTY_ELEMENTS
 
     def __call__(self, *children, **attrs):
-        if children and attrs:
-            raise TypeError("Cannot have both children and attrs")
-
         if children:
             if self._is_empty:
                 raise TypeError("<%s> cannot have children" % self._tag)
