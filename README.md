@@ -197,6 +197,41 @@ dom = (
 ```
 
 
+## Underscores are magic
+
+### Use underscores instead of dashes
+
+Like most popular languages, Python doesn't support dashes in identifiers. So if you want to build
+an element that includes dashes in the tag or attributes, like `<my-element foo-bar="baz">`, you can
+do so by using underscores instead:
+
+```py
+from htbuilder import my_element
+
+dom = my_element(foo_bar="baz")
+
+print(dom)
+# Prints:
+# <my-element foo-bar="baz"></my-element>
+```
+
+### Prefix with underscore to avoid reserved words
+
+The word `class` is reserved in Python, so if you can to set an element's `class` attribute you
+should prepend it with an underscore like this:
+
+```py
+dom = div(_class="myclass")
+
+print(dom)
+# Prints:
+# <div class="myclass"></div>
+```
+
+This works because underscores preding or following any identifier are automatically stripped away
+for you.
+
+
 ## Working with Python &lt; 3.7
 
 If using Python &lt; 3.7, the import should look like this instead:
