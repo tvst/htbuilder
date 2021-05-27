@@ -202,7 +202,7 @@ dom = (
 ### Use underscores instead of dashes
 
 Like most popular languages, Python doesn't support dashes in identifiers. So if you want to build
-an element that includes dashes in the tag or attributes, like `<my-element foo-bar="baz">`, you can
+an element that includes dashes in the tag name or attributes, like `<my-element foo-bar="baz">`, you can
 do so by using underscores instead:
 
 ```py
@@ -217,7 +217,7 @@ print(dom)
 
 ### Prefix with underscore to avoid reserved words
 
-The word `class` is reserved in Python, so if you can to set an element's `class` attribute you
+The word `class` is reserved in Python, so if you want to set an element's `class` attribute you
 should prepend it with an underscore like this:
 
 ```py
@@ -228,7 +228,7 @@ print(dom)
 # <div class="myclass"></div>
 ```
 
-This works because underscores preding or following any identifier are automatically stripped away
+This works because underscores preceding or following any identifier are automatically stripped away
 for you.
 
 
