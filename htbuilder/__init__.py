@@ -121,7 +121,7 @@ class HtmlElement(object):
         if children:
             if self._is_empty:
                 raise TypeError("<%s> cannot have children" % self._tag)
-            self._children = deepflatten([*self._children, *children])
+            self._children = list(deepflatten([*self._children, *children]))
 
         if attrs:
             self._attrs = {**self._attrs, **attrs}

@@ -260,6 +260,15 @@ class TestHtBuilder(unittest.TestCase):
             <div foo="bar">hello</div>
         '''))
 
+    def test_repeat(self):
+        dom = div("hello", foo="bar")
+        self.assertEqual(str(dom), normalize_whitespace('''
+            <div foo="bar">hello</div>
+        '''))
+        self.assertEqual(str(dom), normalize_whitespace('''
+            <div foo="bar">hello</div>
+        '''))
+
 
 if __name__ == '__main__':
     unittest.main()
