@@ -147,7 +147,7 @@ class HtmlElement(object):
         args = {
             "tag": _clean_name(self._tag),
             "attrs": " ".join(
-                ['%s="%s"' % (_clean_name(k), v) for k, v in self._attrs.items()]
+                [f'{_clean_name(k)}="{v}"' for k, v in self._attrs.items()]
             ),
             "children": "".join([str(c) for c in self._children]),
         }
