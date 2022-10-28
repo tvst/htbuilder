@@ -1,11 +1,11 @@
 import setuptools
 
-with open("README.md", "r", encoding='utf8') as fh:
+with open("README.md", "r", encoding="utf8") as fh:
     long_description = fh.read()
 
 setuptools.setup(
     name="htbuilder",
-    version="0.6.0",
+    version="0.6.1",
     author="Thiago Teixeira",
     author_email="me@thiagot.com",
     description="A purely-functional HTML builder for Python. Think JSX rather than templates.",
@@ -14,11 +14,11 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/tvst/htbuilder",
     packages=setuptools.find_packages(exclude=["tests", "tests.*"]),
-    install_requires=["iteration_utilities"],
+    install_requires=["more-itertools"],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: Apache Software License",
         "Operating System :: OS Independent",
     ],
-    python_requires='>=3.5',
+    python_requires=">=3.5",
 )
