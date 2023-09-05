@@ -59,38 +59,39 @@ If using Python < 3.7, the import should look like this instead:
 
 """
 
+from more_itertools import collapse
+
 from .funcs import func
 from .units import unit
-from .utils import classes, styles, fonts, rule
-from iteration_utilities import deepflatten
+from .utils import classes, fonts, rule, styles
 
-
-EMPTY_ELEMENTS = set([
-    # https://developer.mozilla.org/en-US/docs/Glossary/Empty_element
-    "area",
-    "base",
-    "br",
-    "col",
-    "embed",
-    "hr",
-    "img",
-    "input",
-    "keygen",
-    "link",
-    "meta",
-    "param",
-    "source",
-    "track",
-    "wbr",
-
-    # SVG
-    "circle",
-    "line",
-    "path",
-    "polygon",
-    "polyline",
-    "rect",
-])
+EMPTY_ELEMENTS = set(
+    [
+        # https://developer.mozilla.org/en-US/docs/Glossary/Empty_element
+        "area",
+        "base",
+        "br",
+        "col",
+        "embed",
+        "hr",
+        "img",
+        "input",
+        "keygen",
+        "link",
+        "meta",
+        "param",
+        "source",
+        "track",
+        "wbr",
+        # SVG
+        "circle",
+        "line",
+        "path",
+        "polygon",
+        "polyline",
+        "rect",
+    ]
+)
 
 
 class _ElementCreator(object):
@@ -121,7 +122,7 @@ class HtmlElement(object):
         if children:
             if self._is_empty:
                 raise TypeError("<%s> cannot have children" % self._tag)
-            self._children = list(deepflatten([*self._children, *children]))
+            self._children = list(collapse([*self._children, *children]))
 
         if attrs:
             self._attrs = {**self._attrs, **attrs}
@@ -145,11 +146,10 @@ class HtmlElement(object):
     def __str__(self):
         args = {
             "tag": _clean_name(self._tag),
-            "attrs": " ".join([
-                "%s=\"%s\"" % (_clean_name(k), v)
-                for k, v in self._attrs.items()
-            ]),
-            "children": "".join([str(c) for c in self._children])
+            "attrs": " ".join(
+                [f'{_clean_name(k)}="{v}"' for k, v in self._attrs.items()]
+            ),
+            "children": "".join([str(c) for c in self._children]),
         }
 
         if self._is_empty:
@@ -171,7 +171,7 @@ def _clean_name(k):
 
 
 def fragment(*args):
-    return ''.join(str(arg) for arg in args)
+    return "".join(str(arg) for arg in args)
 
 
 # Python >= 3.7
