@@ -3,7 +3,7 @@
 htbuilder lets you build HTML strings using a purely functional syntax in Python.
 Why use templating languages when you can just use functions?
 
-(PS: If you like this, check out [jsbuild](https://github.com/tvst/jsbuild) which
+(PS: If you like this, check out [jsbuilder](https://github.com/tvst/jsbuilder) which
 lets you build JavaScript strings by simply annotating Python functions!)
 
 ## Installation
