@@ -1,5 +1,7 @@
 # htbuilder — tiny HTML string builder for Python
 
+[![htbuilder Downloads Last Month](https://assets.piptrends.com/get-last-month-downloads-badge/htbuilder.svg 'htbuilder Downloads Last Month by pip Trends')](https://piptrends.com/package/htbuilder)
+
 htbuilder lets you build HTML strings using a purely functional syntax in Python.
 Why use templating languages when you can just use functions?
 
