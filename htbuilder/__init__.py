@@ -59,6 +59,7 @@ If using Python < 3.7, the import should look like this instead:
 
 """
 
+import markupsafe
 from more_itertools import collapse
 
 from .funcs import func
@@ -146,10 +147,14 @@ class HtmlElement(object):
     def __str__(self):
         args = {
             "tag": _clean_name(self._tag),
-            "attrs": " ".join(
-                [f'{_clean_name(k)}="{v}"' for k, v in self._attrs.items()]
-            ),
-            "children": "".join([str(c) for c in self._children]),
+            "attrs": " ".join([
+                f'{_clean_name(k)}="{markupsafe.escape(v)}"'
+                for k, v in self._attrs.items()
+            ]),
+            "children": "".join([
+                markupsafe.escape(c) if isinstance(c, str) else str(c)
+                for c in self._children
+            ]),
         }
 
         if self._is_empty:
