@@ -269,6 +269,13 @@ class TestHtBuilder(unittest.TestCase):
             <div foo="bar">hello</div>
         '''))
 
+    def test_repr_html(self):
+        dom = div("Exists!")
+        self.assertEqual(
+            dom._repr_html_(),
+            normalize_whitespace('<div>Exists!</div>'),
+        )
+
 
 if __name__ == '__main__':
     unittest.main()

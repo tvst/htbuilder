@@ -163,6 +163,9 @@ class HtmlElement(object):
             else:
                 return "<%(tag)s>%(children)s</%(tag)s>" % args
 
+    def _repr_html_(self):
+        return str(self)
+
 
 def _clean_name(k):
     # This allows you to use reserved words by prepending/appending underscores.
