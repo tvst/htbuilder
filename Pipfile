@@ -9,6 +9,7 @@ twine = "*"
 
 [packages]
 more-itertools = "*"
+markupsafe = "*"
 
 [requires]
 python_version = "3.8"
