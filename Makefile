@@ -29,6 +29,10 @@ clean:
 	rm -rf *.egg-info
 	rm -f Pipfile.lock
 
+.PHONY: check-types
+check-types:
+	mypy -p htbuilder
+
 .PHONY: push-pypi
 # Pushes the package to PyPI.
 push-pypi:
@@ -38,4 +42,4 @@ push-pypi:
 
 .PHONY: distribute
 # Tests and pushes the package to PyPI
-distribute: test push-pypi
+distribute: check-types test push-pypi

@@ -21,9 +21,7 @@ Build HTML strings using a purely functional syntax:
 Example
 -------
 
-If using Python 3.7+:
-
->>> from htbuilder import div, ul, li, img  # This syntax requires Python 3.7+
+>>> from htbuilder import div, ul, li, img
 >>>
 >>> image_paths = [
 ...   "http://...",
@@ -45,21 +43,11 @@ If using Python 3.7+:
 >>> # Or convert to string with:
 >>> x = str(out)
 
-
-If using Python < 3.7, the import should look like this instead:
-
->>> from htbuilder import H
->>>
->>> div = H.div
->>> ul = H.ul
->>> li = H.li
->>> img = H.img
->>>
->>> # ...then the rest is the same as in the previous example.
-
 """
 
-from typing import Iterable
+from __future__ import annotations
+
+from typing import Any, Iterable
 
 from .funcs import func
 from .units import unit
@@ -94,41 +82,19 @@ EMPTY_ELEMENTS = set(
 )
 
 
-class _ElementCreator(object):
-    def __getattr__(self, tag):
-        return HtmlTag(tag)
-
-
-class HtmlTag(object):
-    def __init__(self, tag):
-        """HTML element builder."""
-        self._tag = tag
-
-    def __call__(self, *args, **kwargs):
-        el = HtmlElement(self._tag)
-        el(*args, **kwargs)
-        return el
-
-    def __getitem__(self, *children):
-        return self(*children)
-
-    def __str__(self):
-        return str(self())
-
-
 class HtmlElement(object):
-    def __init__(self, tag, attrs={}, children=[]):
+    def __init__(self, tag: str, *children: Any, **attrs: Any):
         """An HTML element."""
         self._tag = tag.lower()
         self._attrs = attrs or {}
-        self._children = children or []
+        self._children = _to_flat_list(children) or []
         self._is_empty = tag in EMPTY_ELEMENTS
 
-    def __call__(self, *children, **attrs):
+    def __call__(self, *children: Any, **attrs: Any) -> HtmlElement:
         if children:
             if self._is_empty:
-                raise TypeError("<%s> cannot have children" % self._tag)
-            flattened = _flatten(children)
+                raise TypeError(f"{self._tag} cannot have children")
+            flattened = _to_flat_list(children)
             self._children += flattened
 
         if attrs:
@@ -136,60 +102,73 @@ class HtmlElement(object):
 
         return self
 
-    def __getattr__(self, name):
+    def __getattr__(self, name: str) -> Any:
         if name in self._attrs:
             return self._attrs[name]
-        raise AttributeError("No such attribute %s" % name)
+        raise AttributeError(f"No such attribute {name}")
 
-    def __setattr__(self, name, value):
+    def __setattr__(self, name: str, value: Any) -> None:
         if name.startswith("_"):
             object.__setattr__(self, name, value)
             return
         self._attrs[name] = value
 
-    def __delattr__(self, name):
+    def __delattr__(self, name: str) -> None:
         del self._attrs[name]
 
-    def __getitem__(self, *children):
+    def __getitem__(self, *children: Any):
         return self(children)
 
-    def __str__(self):
-        args = {
-            "tag": _clean_name(self._tag),
-            "attrs": " ".join(
-                [f'{_clean_name(k)}="{v}"' for k, v in self._attrs.items()]
-            ),
-            "children": "".join([str(c) for c in self._children]),
-        }
+    def __str__(self) -> str:
+        tag = _clean_name(self._tag)
+        attrs = " ".join([f'{_clean_name(k)}="{v}"' for k, v in self._attrs.items()])
+        children = "".join([str(c) for c in self._children])
 
         if self._is_empty:
             if self._attrs:
-                return "<%(tag)s %(attrs)s/>" % args
+                return f"<{tag} {attrs}/>"
             else:
-                return "<%(tag)s/>" % args
+                return f"<{tag}/>"
         else:
             if self._attrs:
-                return "<%(tag)s %(attrs)s>%(children)s</%(tag)s>" % args
+                return f"<{tag} {attrs}>{children}</{tag}>"
             else:
-                return "<%(tag)s>%(children)s</%(tag)s>" % args
+                return f"<{tag}>{children}</{tag}>"
 
-    def _repr_html_(self):
+    def _repr_html_(self) -> str:
         return str(self)
 
 
-def _clean_name(k):
-    # This allows you to use reserved words by prepending/appending underscores.
-    # For example, "_class" instead of "class".
-    return k.strip("_").replace("_", "-")
+class HtmlTag(object):
+    def __init__(self, tag):
+        """HTML element builder."""
+        self._tag = tag
+
+    def __call__(self, *args: Any, **kwargs: Any) -> HtmlElement:
+        return HtmlElement(self._tag, *args, **kwargs)
+
+    def __getitem__(self, *children) -> HtmlElement:
+        return self(*children)
+
+    def __str__(self) -> str:
+        return str(self())
 
 
-def fragment(*args):
+def _clean_name(name: str) -> str:
+    """
+    This allows you to use reserved words by prepending/appending underscores.
+    For example, "_class" instead of "class".
+    """
+    return name.strip("_").replace("_", "-")
+
+
+def fragment(*args) -> str:
     return "".join(str(arg) for arg in args)
 
 
-def _flatten(obj):
+def _to_flat_list(obj: Any) -> Any:
     queue = [list(obj)]
-    out = []
+    out: list[Any] = []
 
     while queue:
         item = queue.pop(0)
@@ -207,11 +186,5 @@ def _flatten(obj):
     return out
 
 
-# Python >= 3.7
-# https://docs.python.org/3/reference/datamodel.html#customizing-module-attribute-access
-def __getattr__(tag):
+def __getattr__(tag: str) -> HtmlTag:
     return HtmlTag(tag)
-
-
-# For Python < 3.7
-H = _ElementCreator()

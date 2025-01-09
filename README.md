@@ -20,7 +20,6 @@ Just import tags like `div` with `from htbuilder import div`, then call them:
 
 ```py
 # Import any tag you want from htbuilder, and it just works!
-# (This syntax requires Python 3.7+. See below for an alternate syntax)
 from htbuilder import div
 
 dom = div('Hello world!')
@@ -269,17 +268,3 @@ print(dom)
 
 This works because underscores preceding or following any identifier are automatically stripped away
 for you.
-
-## Working with Python &lt; 3.7
-
-If using Python &lt; 3.7, the import should look like this instead:
-
-```py
-from htbuilder import H
-
-div = H.div
-ul = H.ul
-li = H.li
-img = H.img
-# ...etc
-```
