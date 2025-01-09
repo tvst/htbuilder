@@ -29,9 +29,13 @@ clean:
 	rm -rf *.egg-info
 	rm -f Pipfile.lock
 
-.PHONY: distribute
-# Distributes the package to PyPI
-distribute:
+.PHONY: push-pypi
+# Pushes the package to PyPI.
+push-pypi:
 	rm -rf dist
 	python setup.py sdist
 	twine upload dist/*
+
+.PHONY: distribute
+# Tests and pushes the package to PyPI
+distribute: test push-pypi
