@@ -14,7 +14,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/tvst/htbuilder",
     packages=setuptools.find_packages(exclude=["tests", "tests.*"]),
-    install_requires=["more-itertools"],
+    install_requires=[],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: Apache Software License",

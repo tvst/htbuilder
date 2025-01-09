@@ -59,7 +59,7 @@ If using Python < 3.7, the import should look like this instead:
 
 """
 
-from more_itertools import collapse
+from typing import Iterable
 
 from .funcs import func
 from .units import unit
@@ -117,15 +117,16 @@ class HtmlElement(object):
     def __init__(self, tag, attrs={}, children=[]):
         """An HTML element."""
         self._tag = tag.lower()
-        self._attrs = attrs
-        self._children = children
+        self._attrs = attrs or {}
+        self._children = children or []
         self._is_empty = tag in EMPTY_ELEMENTS
 
     def __call__(self, *children, **attrs):
         if children:
             if self._is_empty:
                 raise TypeError("<%s> cannot have children" % self._tag)
-            self._children = list(collapse([*self._children, *children]))
+            flattened = _flatten(children)
+            self._children += flattened
 
         if attrs:
             self._attrs = {**self._attrs, **attrs}
@@ -147,7 +148,7 @@ class HtmlElement(object):
         del self._attrs[name]
 
     def __getitem__(self, *children):
-        return self(*children)
+        return self(children)
 
     def __str__(self):
         args = {
@@ -181,6 +182,26 @@ def _clean_name(k):
 
 def fragment(*args):
     return "".join(str(arg) for arg in args)
+
+
+def _flatten(obj):
+    queue = [list(obj)]
+    out = []
+
+    while queue:
+        item = queue.pop(0)
+
+        # Strings are iterables so they need to be excluded separately.
+        if isinstance(item, str):
+            out.append(item)
+
+        elif not isinstance(item, Iterable):
+            out.append(item)
+
+        else:
+            queue = list(item) + queue
+
+    return out
 
 
 # Python >= 3.7

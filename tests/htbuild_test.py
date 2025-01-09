@@ -15,15 +15,16 @@
 import unittest
 
 from htbuilder import (
-    div,
-    ul,
-    li,
-    img,
-    h1,
-    script,
-    fragment,
-    my_custom_element,
     _my_custom_element,
+    div,
+    fragment,
+    h1,
+    img,
+    li,
+    my_custom_element,
+    script,
+    span,
+    ul,
 )
 from htbuilder.funcs import rgba
 from htbuilder.units import px
@@ -61,6 +62,43 @@ class TestHtBuilder(unittest.TestCase):
             normalize_whitespace('<img src="foo"/>'),
         )
 
+    def test_no_state(self):
+        """Test that children don't accumulate (bugfix)."""
+        x = div()
+        y = div("123")
+        z = div("456")
+
+        self.assertEqual(
+            str(x),
+            normalize_whitespace("<div></div>"),
+        )
+
+        self.assertEqual(
+            str(y),
+            normalize_whitespace("<div>123</div>"),
+        )
+
+        self.assertEqual(
+            str(z),
+            normalize_whitespace("<div>456</div>"),
+        )
+
+    def test_multiple_children(self):
+        dom = div(
+            span("Child 1"),
+            span("Child 2"),
+        )
+
+        self.assertEqual(
+            str(dom),
+            normalize_whitespace("""
+            <div>
+                <span>Child 1</span>
+                <span>Child 2</span>
+            </div>
+        """),
+        )
+
     def test_tuple_children(self):
         children = tuple(range(5))
         dom = div(id="container")(children)
@@ -94,12 +132,12 @@ class TestHtBuilder(unittest.TestCase):
         self.assertEqual(str(dom), "<div>01234</div>")
 
     def test_nested_children(self):
-        children = [range(2), tuple(range(3))]
+        children = [range(2), [tuple(range(3)), {"x": 100, "y": 200}]]
         dom = div(id="container")(children)
-        self.assertEqual(str(dom), '<div id="container">01012</div>')
+        self.assertEqual(str(dom), '<div id="container">01012xy</div>')
 
         dom = div(children)
-        self.assertEqual(str(dom), "<div>01012</div>")
+        self.assertEqual(str(dom), "<div>01012xy</div>")
 
     def test_complex_tree(self):
         dom = div(id="container")(
@@ -404,7 +442,7 @@ class TestHtBuilder(unittest.TestCase):
         dom = div("Exists!")
         self.assertEqual(
             dom._repr_html_(),
-            normalize_whitespace('<div>Exists!</div>'),
+            normalize_whitespace("<div>Exists!</div>"),
         )
 
 
