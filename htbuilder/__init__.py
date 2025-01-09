@@ -82,49 +82,76 @@ EMPTY_ELEMENTS = set(
 )
 
 
-class HtmlElement(object):
-    def __init__(self, tag: str, *children: Any, **attrs: Any):
+class HtmlElement:
+    _MEMBERS = {
+        "_cannot_have_attributes",
+        "_cannot_have_children",
+        "_tag",
+        "_attrs",
+        "_children",
+    }
+
+    def __init__(self, tag: str | None, *children: Any, **attrs: Any):
         """An HTML element."""
-        self._tag = tag.lower()
+        self._tag = tag.lower() if tag else None
         self._attrs = attrs or {}
         self._children = _to_flat_list(children) or []
-        self._is_empty = tag in EMPTY_ELEMENTS
+
+        self._cannot_have_attributes = tag is None
+        self._cannot_have_children = tag in EMPTY_ELEMENTS
 
     def __call__(self, *children: Any, **attrs: Any) -> HtmlElement:
         if children:
-            if self._is_empty:
+            if self._cannot_have_children:
                 raise TypeError(f"{self._tag} cannot have children")
             flattened = _to_flat_list(children)
             self._children += flattened
 
         if attrs:
+            if self._cannot_have_attributes:
+                raise TypeError("Fragments cannot have attributes")
             self._attrs = {**self._attrs, **attrs}
 
         return self
 
     def __getattr__(self, name: str) -> Any:
+        if self._cannot_have_attributes:
+            raise TypeError("Fragments cannot have attributes")
+
         if name in self._attrs:
             return self._attrs[name]
+
         raise AttributeError(f"No such attribute {name}")
 
     def __setattr__(self, name: str, value: Any) -> None:
         if name.startswith("_"):
+            if name not in HtmlElement._MEMBERS and self._cannot_have_attributes:
+                raise TypeError("Fragments cannot have attributes")
+
             object.__setattr__(self, name, value)
             return
+
         self._attrs[name] = value
 
     def __delattr__(self, name: str) -> None:
+        if self._cannot_have_attributes:
+            raise TypeError("Fragments cannot have attributes")
+
         del self._attrs[name]
 
     def __getitem__(self, *children: Any):
         return self(children)
 
     def __str__(self) -> str:
-        tag = _clean_name(self._tag)
-        attrs = " ".join([f'{_clean_name(k)}="{v}"' for k, v in self._attrs.items()])
         children = "".join([str(c) for c in self._children])
 
-        if self._is_empty:
+        if self._tag is None:
+            return children
+
+        tag = _clean_name(self._tag)
+        attrs = " ".join([f'{_clean_name(k)}="{v}"' for k, v in self._attrs.items()])
+
+        if self._cannot_have_children:
             if self._attrs:
                 return f"<{tag} {attrs}/>"
             else:
@@ -139,8 +166,8 @@ class HtmlElement(object):
         return str(self)
 
 
-class HtmlTag(object):
-    def __init__(self, tag):
+class HtmlTag:
+    def __init__(self, tag: str | None):
         """HTML element builder."""
         self._tag = tag
 
@@ -162,8 +189,7 @@ def _clean_name(name: str) -> str:
     return name.strip("_").replace("_", "-")
 
 
-def fragment(*args) -> str:
-    return "".join(str(arg) for arg in args)
+fragment = HtmlTag(None)
 
 
 def _to_flat_list(obj: Any) -> Any:
