@@ -49,22 +49,43 @@ print(
 # Prints '<div id="sidebar" foo="bar"></div>'
 ```
 
-To specify both attributes and children, first specify the attributes using
-keyword args, then pass the children afterwards **inside a new
-set of parentheses**:
+To specify both attributes and children, you can just use regular Python argument
+notation:
 
 ```py
 print(
-  div(id='sidebar', foo='bar')(
-    "Hello world!"
-  )
+  div("Hello world!", id='sidebar', foo='bar')
 )
 # Prints '<div id="sidebar" foo="bar">Hello world!</div>'
 ```
 
-This is required because Python doesn't allow you to pass keyword arguments
-_before_ you pass normal arguments.
+...but some might find this order a bit weird! It doesn't the ordering you might be used to in HTML.
 
+So we also support two other notations:
+
+1. You can then pass the children afterwards **inside a new set of parentheses**:
+
+   ```py
+   print(
+     div(id='sidebar', foo='bar')(
+       "Hello world!"
+     )
+   )
+   # Prints '<div id="sidebar" foo="bar">Hello world!</div>'
+   ```
+
+1. Or you can pass the children inside `[]` for added clarity:
+
+   ```py
+   print(
+     div(id='sidebar', foo='bar')[
+       "Hello world!"
+     ]
+   )
+   # Prints '<div id="sidebar" foo="bar">Hello world!</div>'
+   ```
+
+All these notations are totally valid and fine! Just pick the one you like best.
 
 ## Multiple children
 
@@ -74,13 +95,13 @@ Want to output multiple children? Just pass them all as arguments:
 from htbuilder import div, ul, li, img
 
 dom = (
-  div(id='container')(
-    ul(_class='greetings')(
+  div(id='container')[
+    ul(_class='greetings')[
       li('hello'),
       li('hi'),
       li('whattup'),
-    )
-  )
+    ]
+  ]
 )
 
 print(dom)
@@ -110,12 +131,12 @@ image_paths = [
 ]
 
 dom = (
-  div(id='container')(
-    ul(_class='image-list')(
+  div(id='container')[
+    ul(_class='image-list')[
       li(img(src=image_path, _class='large-image'))
       for image_path in image_paths
-    )
-  )
+    ]
+  ]
 )
 
 print(dom)
@@ -139,14 +160,33 @@ use_bold = True
 
 dom = (
   div(
-      b("bold text")
-    if use_bold else
-      "normal text"
+    b("bold text") if use_bold else "normal text"
   )
 )
 
 print(dom)
 # Prints: <div><b>bold text</b></div>
+```
+
+## Modify elements imperatively
+
+Elements accumulate the arguments you send to them, so you can intersperse DOM and code very
+naturally:
+
+```py
+parent = div()
+
+for url in img_urls:
+  child = img(src="https://foo.com/myimage.png")
+  child.width = 200
+  child.height = 100
+
+  if alt_text:
+    child.alt = alt_text
+  else:
+    child.alt = "The developer forgot to enter a description. Go scold them!"
+
+  parent(child)
 ```
 
 ## Styling
@@ -196,7 +236,6 @@ dom = (
 #   "></div>
 ```
 
-
 ## Underscores are magic
 
 ### Use underscores instead of dashes
@@ -230,7 +269,6 @@ print(dom)
 
 This works because underscores preceding or following any identifier are automatically stripped away
 for you.
-
 
 ## Working with Python &lt; 3.7
 
