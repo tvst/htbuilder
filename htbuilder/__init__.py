@@ -189,9 +189,6 @@ def _clean_name(name: str) -> str:
     return name.strip("_").replace("_", "-")
 
 
-fragment = HtmlTag(None)
-
-
 def _to_flat_list(obj: Any) -> Any:
     queue = [list(obj)]
     out: list[Any] = []
@@ -213,4 +210,6 @@ def _to_flat_list(obj: Any) -> Any:
 
 
 def __getattr__(tag: str) -> HtmlTag:
+    if tag == "fragment":
     return HtmlTag(tag)
+        return HtmlTag(None)

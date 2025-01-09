@@ -90,6 +90,27 @@ class TestHtBuilder(unittest.TestCase):
             normalize_whitespace("<div>456</div>"),
         )
 
+    def test_fragment_no_state(self):
+        """Test that children of fragments don't accumulate (bugfix)."""
+        x = fragment()
+        y = fragment("123")
+        z = fragment("456")
+
+        self.assertEqual(
+            str(x),
+            normalize_whitespace(""),
+        )
+
+        self.assertEqual(
+            str(y),
+            normalize_whitespace("123"),
+        )
+
+        self.assertEqual(
+            str(z),
+            normalize_whitespace("456"),
+        )
+
     def test_multiple_children(self):
         dom = div(
             span("Child 1"),
