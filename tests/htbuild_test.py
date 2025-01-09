@@ -26,7 +26,7 @@ from htbuilder import (
     _my_custom_element,
 )
 from htbuilder.funcs import rgba
-from htbuilder.units import px, em, percent
+from htbuilder.units import px
 from htbuilder.utils import styles
 
 from .test_util import normalize_whitespace
@@ -189,7 +189,7 @@ class TestHtBuilder(unittest.TestCase):
         """),
         )
 
-    def test_funcs_and_units_in_builder(self):
+    def test_styles(self):
         dom = div(style=styles(animate=["color", "margin"]))
         self.assertEqual(
             str(dom),
@@ -199,7 +199,7 @@ class TestHtBuilder(unittest.TestCase):
         )
 
     def test_script_tag(self):
-        dom = script(language="javascript")("console.log('omg!')")
+        dom = script("console.log('omg!')", language="javascript")
         self.assertEqual(
             str(dom),
             normalize_whitespace("""
@@ -216,6 +216,26 @@ class TestHtBuilder(unittest.TestCase):
         """),
         )
 
+    def test_call_after_build(self):
+        dom = div(foo="bar")
+        dom("hello")
+
+        self.assertEqual(
+            str(dom),
+            normalize_whitespace("""
+            <div foo="bar">hello</div>
+        """),
+        )
+
+        dom("world")
+
+        self.assertEqual(
+            str(dom),
+            normalize_whitespace("""
+            <div foo="bar">helloworld</div>
+        """),
+        )
+
     def test_get_set_del_attr(self):
         dom = div(foo="bar", boz="boink")
 
@@ -227,16 +247,37 @@ class TestHtBuilder(unittest.TestCase):
         self.assertEqual(dom.foo, "bar2")
         self.assertEqual(dom.boz, "boink")
 
+        self.assertEqual(
+            str(dom),
+            normalize_whitespace("""
+            <div foo="bar2" boz="boink"></div>
+        """),
+        )
+
         dom.boz = "boink2"
 
         self.assertEqual(dom.foo, "bar2")
         self.assertEqual(dom.boz, "boink2")
+
+        self.assertEqual(
+            str(dom),
+            normalize_whitespace("""
+            <div foo="bar2" boz="boink2"></div>
+        """),
+        )
 
         del dom.boz
 
         self.assertEqual(dom.foo, "bar2")
         with self.assertRaises(AttributeError):
             getattr(dom, "boz")
+
+        self.assertEqual(
+            str(dom),
+            normalize_whitespace("""
+            <div foo="bar2"></div>
+        """),
+        )
 
         del dom.foo
 
@@ -245,12 +286,19 @@ class TestHtBuilder(unittest.TestCase):
         with self.assertRaises(AttributeError):
             getattr(dom, "boz")
 
+        self.assertEqual(
+            str(dom),
+            normalize_whitespace("""
+            <div></div>
+        """),
+        )
+
     def test_no_such_attr(self):
         dom = div()
         res = hasattr(dom, "foo")
         self.assertFalse(res)
 
-    def test_tag_understores_to_dashes(self):
+    def test_tag_underscores_to_dashes(self):
         dom = my_custom_element(foo="bar")
         self.assertEqual(
             str(dom),
@@ -259,7 +307,7 @@ class TestHtBuilder(unittest.TestCase):
         """),
         )
 
-    def test_tag_understores_to_dashes_with_strip(self):
+    def test_tag_underscores_to_dashes_with_strip(self):
         dom = _my_custom_element(foo="bar")
         self.assertEqual(
             str(dom),
@@ -268,7 +316,7 @@ class TestHtBuilder(unittest.TestCase):
         """),
         )
 
-    def test_attr_understores_to_dashes(self):
+    def test_attr_underscores_to_dashes(self):
         dom = div(foo_bar="boz")
         self.assertEqual(
             str(dom),
@@ -277,7 +325,7 @@ class TestHtBuilder(unittest.TestCase):
         """),
         )
 
-    def test_attr_understores_to_dashes_with_strip(self):
+    def test_attr_underscores_to_dashes_with_strip(self):
         dom = div(__foo_bar_="boz")
         self.assertEqual(
             str(dom),
@@ -332,6 +380,23 @@ class TestHtBuilder(unittest.TestCase):
             str(dom),
             normalize_whitespace("""
             <div foo="bar">hello</div>
+        """),
+        )
+
+    def test_recall_notation(self):
+        dom = div(foo="bar")("hello")
+        self.assertEqual(
+            str(dom),
+            normalize_whitespace("""
+            <div foo="bar">hello</div>
+        """),
+        )
+
+        dom = div("hello")("world")
+        self.assertEqual(
+            str(dom),
+            normalize_whitespace("""
+            <div>helloworld</div>
         """),
         )
 
