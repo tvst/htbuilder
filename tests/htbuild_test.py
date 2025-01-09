@@ -14,7 +14,17 @@
 
 import unittest
 
-from htbuilder import div, ul, li, img, h1, script, fragment, my_custom_element, _my_custom_element
+from htbuilder import (
+    div,
+    ul,
+    li,
+    img,
+    h1,
+    script,
+    fragment,
+    my_custom_element,
+    _my_custom_element,
+)
 from htbuilder.funcs import rgba
 from htbuilder.units import px, em, percent
 from htbuilder.utils import styles
@@ -27,18 +37,18 @@ class TestHtBuilder(unittest.TestCase):
         dom = div()
         self.assertEqual(
             str(dom),
-            normalize_whitespace('<div></div>'),
+            normalize_whitespace("<div></div>"),
         )
 
     def test_basic_usage(self):
-        dom = div('hello')
+        dom = div("hello")
         self.assertEqual(
             str(dom),
-            normalize_whitespace('<div>hello</div>'),
+            normalize_whitespace("<div>hello</div>"),
         )
 
     def test_basic_usage_with_arg(self):
-        dom = div(id='container')('hello')
+        dom = div(id="container")("hello")
         self.assertEqual(
             str(dom),
             normalize_whitespace('<div id="container">hello</div>'),
@@ -53,58 +63,56 @@ class TestHtBuilder(unittest.TestCase):
 
     def test_tuple_children(self):
         children = tuple(range(5))
-        dom = div(id='container')(children)
+        dom = div(id="container")(children)
         self.assertEqual(str(dom), '<div id="container">01234</div>')
 
         dom = div(children)
-        self.assertEqual(str(dom), '<div>01234</div>')
+        self.assertEqual(str(dom), "<div>01234</div>")
 
     def test_vararg_children(self):
         children = tuple(range(5))
-        dom = div(id='container')(*children)
+        dom = div(id="container")(*children)
         self.assertEqual(str(dom), '<div id="container">01234</div>')
 
         dom = div(*children)
-        self.assertEqual(str(dom), '<div>01234</div>')
+        self.assertEqual(str(dom), "<div>01234</div>")
 
     def test_list_children(self):
         children = list(range(5))
-        dom = div(id='container')(children)
+        dom = div(id="container")(children)
         self.assertEqual(str(dom), '<div id="container">01234</div>')
 
         dom = div(children)
-        self.assertEqual(str(dom), '<div>01234</div>')
+        self.assertEqual(str(dom), "<div>01234</div>")
 
     def test_iterable_children(self):
         children = range(5)
-        dom = div(id='container')(children)
+        dom = div(id="container")(children)
         self.assertEqual(str(dom), '<div id="container">01234</div>')
 
         dom = div(children)
-        self.assertEqual(str(dom), '<div>01234</div>')
+        self.assertEqual(str(dom), "<div>01234</div>")
 
     def test_nested_children(self):
         children = [range(2), tuple(range(3))]
-        dom = div(id='container')(children)
+        dom = div(id="container")(children)
         self.assertEqual(str(dom), '<div id="container">01012</div>')
 
         dom = div(children)
-        self.assertEqual(str(dom), '<div>01012</div>')
+        self.assertEqual(str(dom), "<div>01012</div>")
 
     def test_complex_tree(self):
-        dom = (
-            div(id='container')(
-                h1('Examples'),
-                ul(
-                    li("Example 1"),
-                    li("Example 2"),
-                    li("Example 3"),
-                )
-            )
+        dom = div(id="container")(
+            h1("Examples"),
+            ul(
+                li("Example 1"),
+                li("Example 2"),
+                li("Example 3"),
+            ),
         )
         self.assertEqual(
             str(dom),
-            normalize_whitespace('''
+            normalize_whitespace("""
                 <div id="container">
                     <h1>Examples</h1>
                     <ul>
@@ -113,87 +121,100 @@ class TestHtBuilder(unittest.TestCase):
                         <li>Example 3</li>
                     </ul>
                 </div>
-            '''),
+            """),
         )
 
     def test_multiple_html_args(self):
-        dom = (
-            div(
-                id='container',
-                _class='foo bar',
-                style='color: red; border-radius: 10px;',
-            )('hello')
-        )
+        dom = div(
+            id="container",
+            _class="foo bar",
+            style="color: red; border-radius: 10px;",
+        )("hello")
         self.assertEqual(
             str(dom),
-            normalize_whitespace('''
+            normalize_whitespace("""
               <div
                 id="container"
                 class="foo bar"
                 style="color: red; border-radius: 10px;"
               >hello</div>
-            '''),
+            """),
         )
 
     def test_functional_component(self):
-        component = ul(_class='myul')(
-            li('Hello'),
+        component = ul(_class="myul")(
+            li("Hello"),
         )
 
-        dom = component(style='color: red')(
-            li('Goodbye'),
+        dom = component(style="color: red")(
+            li("Goodbye"),
         )
 
         self.assertEqual(
             str(dom),
-            normalize_whitespace('''
+            normalize_whitespace("""
               <ul
                 class="myul"
                 style="color: red"
                   ><li>Hello</li>
                   <li>Goodbye</li>
               </ul>
-            '''),
+            """),
         )
 
     def test_funcs_in_builder(self):
         dom = div(style=styles(color=rgba(10, 20, 30, 40)))
-        self.assertEqual(str(dom), normalize_whitespace('''
+        self.assertEqual(
+            str(dom),
+            normalize_whitespace("""
             <div style="color:rgba(10,20,30,40)"></div>
-        '''))
+        """),
+        )
 
     def test_units_in_builder(self):
         dom = div(style=styles(foo=px(10, 9, 8)))
-        self.assertEqual(str(dom), normalize_whitespace('''
+        self.assertEqual(
+            str(dom),
+            normalize_whitespace("""
             <div style="foo:10px 9px 8px"></div>
-        '''))
+        """),
+        )
 
     def test_funcs_and_units_in_builder(self):
         dom = div(style=styles(margin=px(0, 0, 10, 0)))
-        self.assertEqual(str(dom), normalize_whitespace('''
+        self.assertEqual(
+            str(dom),
+            normalize_whitespace("""
             <div style="margin:0 0 10px 0"></div>
-        '''))
+        """),
+        )
 
     def test_funcs_and_units_in_builder(self):
-        dom = div(style=styles(animate=['color', 'margin']))
-        self.assertEqual(str(dom), normalize_whitespace('''
+        dom = div(style=styles(animate=["color", "margin"]))
+        self.assertEqual(
+            str(dom),
+            normalize_whitespace("""
             <div style="animate:color,margin"></div>
-        '''))
+        """),
+        )
 
     def test_script_tag(self):
         dom = script(language="javascript")("console.log('omg!')")
-        self.assertEqual(str(dom), normalize_whitespace('''
+        self.assertEqual(
+            str(dom),
+            normalize_whitespace("""
             <script language="javascript">console.log('omg!')</script>
-        '''))
+        """),
+        )
 
     def test_fragment_tag(self):
-        dom = fragment(
-            h1('hello'),
-            div('world')
-        )
-        self.assertEqual(str(dom), normalize_whitespace('''
+        dom = fragment(h1("hello"), div("world"))
+        self.assertEqual(
+            str(dom),
+            normalize_whitespace("""
             <h1>hello</h1><div>world</div>
-        '''))
+        """),
+        )
 
     def test_get_set_del_attr(self):
         dom = div(foo="bar", boz="boink")
@@ -224,7 +245,6 @@ class TestHtBuilder(unittest.TestCase):
         with self.assertRaises(AttributeError):
             getattr(dom, "boz")
 
-
     def test_no_such_attr(self):
         dom = div()
         res = hasattr(dom, "foo")
@@ -232,43 +252,89 @@ class TestHtBuilder(unittest.TestCase):
 
     def test_tag_understores_to_dashes(self):
         dom = my_custom_element(foo="bar")
-        self.assertEqual(str(dom), normalize_whitespace('''
+        self.assertEqual(
+            str(dom),
+            normalize_whitespace("""
             <my-custom-element foo="bar"></my-custom-element>
-        '''))
+        """),
+        )
 
     def test_tag_understores_to_dashes_with_strip(self):
         dom = _my_custom_element(foo="bar")
-        self.assertEqual(str(dom), normalize_whitespace('''
+        self.assertEqual(
+            str(dom),
+            normalize_whitespace("""
             <my-custom-element foo="bar"></my-custom-element>
-        '''))
+        """),
+        )
 
     def test_attr_understores_to_dashes(self):
         dom = div(foo_bar="boz")
-        self.assertEqual(str(dom), normalize_whitespace('''
+        self.assertEqual(
+            str(dom),
+            normalize_whitespace("""
             <div foo-bar="boz"></div>
-        '''))
+        """),
+        )
 
     def test_attr_understores_to_dashes_with_strip(self):
         dom = div(__foo_bar_="boz")
-        self.assertEqual(str(dom), normalize_whitespace('''
+        self.assertEqual(
+            str(dom),
+            normalize_whitespace("""
             <div foo-bar="boz"></div>
-        '''))
+        """),
+        )
 
     def test_arg_order(self):
         dom = div("hello", foo="bar")
-        self.assertEqual(str(dom), normalize_whitespace('''
+        self.assertEqual(
+            str(dom),
+            normalize_whitespace("""
             <div foo="bar">hello</div>
-        '''))
+        """),
+        )
 
     def test_repeat(self):
         dom = div("hello", foo="bar")
-        self.assertEqual(str(dom), normalize_whitespace('''
+        self.assertEqual(
+            str(dom),
+            normalize_whitespace("""
             <div foo="bar">hello</div>
-        '''))
-        self.assertEqual(str(dom), normalize_whitespace('''
+        """),
+        )
+        self.assertEqual(
+            str(dom),
+            normalize_whitespace("""
             <div foo="bar">hello</div>
-        '''))
+        """),
+        )
+
+    def test_getitem_notation(self):
+        dom = div["hello"]
+        self.assertEqual(
+            str(dom),
+            normalize_whitespace("""
+            <div>hello</div>
+        """),
+        )
+
+        dom = div()["hello"]
+        self.assertEqual(
+            str(dom),
+            normalize_whitespace("""
+            <div>hello</div>
+        """),
+        )
+
+        dom = div(foo="bar")["hello"]
+        self.assertEqual(
+            str(dom),
+            normalize_whitespace("""
+            <div foo="bar">hello</div>
+        """),
+        )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

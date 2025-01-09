@@ -109,6 +109,9 @@ class HtmlTag(object):
         el(*args, **kwargs)
         return el
 
+    def __getitem__(self, *children):
+        return self(*children)
+
 
 class HtmlElement(object):
     def __init__(self, tag, attrs={}, children=[]):
@@ -142,6 +145,9 @@ class HtmlElement(object):
 
     def __delattr__(self, name):
         del self._attrs[name]
+
+    def __getitem__(self, *children):
+        return self(*children)
 
     def __str__(self):
         args = {
