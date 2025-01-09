@@ -112,6 +112,9 @@ class HtmlTag(object):
     def __getitem__(self, *children):
         return self(*children)
 
+    def __str__(self):
+        return str(self())
+
 
 class HtmlElement(object):
     def __init__(self, tag, attrs={}, children=[]):

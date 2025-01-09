@@ -41,6 +41,13 @@ class TestHtBuilder(unittest.TestCase):
             normalize_whitespace("<div></div>"),
         )
 
+    def test_empty_nocall(self):
+        dom = div
+        self.assertEqual(
+            str(dom),
+            normalize_whitespace("<div></div>"),
+        )
+
     def test_basic_usage(self):
         dom = div("hello")
         self.assertEqual(
