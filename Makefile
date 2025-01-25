@@ -32,14 +32,3 @@ clean:
 .PHONY: check-types
 check-types:
 	mypy -p htbuilder
-
-.PHONY: push-pypi
-# Pushes the package to PyPI.
-push-pypi:
-	rm -rf dist
-	python setup.py sdist
-	twine upload dist/*
-
-.PHONY: distribute
-# Tests and pushes the package to PyPI
-distribute: check-types test push-pypi
